@@ -4,6 +4,21 @@ from .models import Room,Topic
 from django.urls import reverse,resolve
 from .views import loginPage,registerPage,logoutUser,room,userProfile,createRoom,home
 
+
+
+class TestViews(TestCase):
+
+    def test_loginPage_GET(self):
+        client = Client()
+        response = client.get(reverse('login'))
+        self.assertEquals(response.status_code, 200)
+
+    def test_register_GET(self):
+        client = Client()
+        response = client.get(reverse('register'))
+        self.assertEquals(response.status_code, 200)
+
+
 class TestModel(TestCase):
 
     def test_correct_room_created(self):
@@ -33,17 +48,3 @@ class TestUrls(TestCase):
         url = reverse('home')
         self.assertEquals(resolve(url).func, home)
 
-class TestViews(TestCase):
-
-    def test_loginPage_GET(self):
-        client = Client()
-        response = client.get(reverse('login'))
-        self.assertEquals(response.status_code, 200)
-
-    def test_register_GET(self):
-        client = Client()
-        response = client.get(reverse('register'))
-        self.assertEquals(response.status_code, 200)
-
-
-# Create your tests here.
