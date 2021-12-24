@@ -1,0 +1,29 @@
+{% extends 'mainPage.html' %}
+
+{% block content %}
+
+<style>
+    .homePageContainer{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+
+<div class="homePageContainer">
+
+    <div>
+        {% include 'base/restrictionsComponent.html' %}
+    </div>
+
+    <div>
+        <h5>{{placeCount}} מקומות מוצגים</h5>
+        <h3><a href="{% url 'createPlace' %}">הוספ/י את מקום עסקך לאתר</a></h3>
+        <hr>
+        {% include 'base/feedComponent.html' %}
+    </div>
+    <div>
+        {% include 'base/activityComponent.html' %}
+    </div>
+
+</div>
+{% endblock content %}

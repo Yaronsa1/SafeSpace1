@@ -1,0 +1,31 @@
+{% extends 'mainPage.html' %}
+
+{% block content %}
+{% if page == 'loginPage' %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label>שם משתמש:</label>
+        <input type="text" name="userName" placeholder="הזנ/י שם משתמש..." />
+        <label>סיסמה:</label>
+        <input type="text" name="password" placeholder="הזנ/י את סיסמתך..."/>
+
+        <input type="submit" value="התחבר"/>
+
+    </form>
+    <p>עוד לא נרשמת לאתר?</p>
+    <a href="{% url 'registerPage' %}">הירשם</a>
+</div>
+{% else %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="יצירת חשבון"/>
+        <input type="submit" value="יצירת חשבון כבעל עסק"/>
+    </form>
+    <p>כבר רשומ/ה לאתר?</p>
+    <a href="{% url 'loginPage' %}">התחבר</a>
+</div>
+{% endif %}
+{% endblock content %}

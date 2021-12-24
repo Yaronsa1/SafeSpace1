@@ -1,0 +1,52 @@
+{% extends 'mainPage.html' %}
+
+{% block content %}
+<style>
+    .placeContainer{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+<div class="placeContainer">
+    <div>
+        <h3>פרטי העסק</h3> <!--03:16:09 מדריך-->
+        <hr>
+    </div>
+    <div>
+        <h1>{{place.name}}</h1>
+        <hr>
+        {% if request.user == place.owner %}
+        <a href="{% url 'updatePlace' place.id %}">עריכה</a>
+        <a href="{% url 'deletePlace' place.id %}">הסרה מהאתר</a>
+        {% endif %}
+        <p>{{room.description}}</p>
+
+        <div class="commentWrapper">
+            <h3>תגובות למקום זה</h3>
+            <hr>
+            {% for comment in comments %}
+                <div>
+                    {% if request.user == comment.owner %}
+                        <div>
+                            <a href="{% url 'commentDelete' comment.id %}">מחק/י תגובתך</a>
+                        </div>
+                    {% endif %}
+                    <small>post {{comment.addedOn|timesince}} ago | על ידי: {{comment.owner}}@</small>
+                    <p>{{comment.body}}</p>           
+                    <hr> 
+                </div>
+            {% endfor %}
+        </div>
+
+
+        {% if request.user.is_authenticated %}
+        <div class="commentForm">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="כתוב ביקורת לעסק זה..." />
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
