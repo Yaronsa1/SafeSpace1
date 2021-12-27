@@ -6,7 +6,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=50, null=True)
     email = models.EmailField(unique=True, null=True)
     permission = models.IntegerField(default=0) #0 = visitor ; 1 = business owner ; 2 = Staff#
-    haveBusiness = models.IntegerField(default=0) #0 = False ; 1 = True#
+    haveBusiness = models.BooleanField(default=False) #False have not ; True have#
     avatar = models.ImageField(null=True, default="avatar.svg")
 
     USERNAME_FIELD = 'email'
