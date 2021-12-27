@@ -111,7 +111,7 @@ def createPlace(request):
     if request.method == 'POST':
         form = PlaceForm(request.POST)
         if form.is_valid():
-            request.user.haveBusiness = 1
+            request.user.haveBusiness = True
             request.user.save()
             place = form.save(commit=False)
             place.owner = request.user
@@ -144,7 +144,7 @@ def deletePlace(request,primaryKey):
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         place.delete()
-        request.user.haveBusiness = 0 
+        request.user.haveBusiness = False 
         request.user.save()
         return redirect('homePage')
     return render(request, 'base/placeDelete.html', {'obj':place})
