@@ -95,6 +95,7 @@ def placePage(request,primaryKey):
     context = {'place':currentPlace, 'placesComments':comments,'restrictions':restrictions}
     return render(request, 'base/placePage.html',context)
 
+@login_required (login_url= 'loginPage')
 def userProfile(request,primaryKey):
     currentUser = User.objects.get(id = primaryKey)
     place = currentUser.place_set.all()
