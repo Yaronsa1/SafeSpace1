@@ -19,7 +19,7 @@
               {% csrf_token %}
               <div class="form__group form__group">
                 <label for="room_name">כתובת מייל (Email Address):</label>
-                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
+                <input id="username" name="username" type="text" placeholder="הזנ/י כתובת מייל..." />
               </div>
               <div class="form__group">
                 <label for="password">סיסמה (password):</label>
@@ -76,15 +76,40 @@
           <div class="layout__body">
             <h2 class="auth__tagline">גלה מקומות בילוי בתקופת הקורונה</h2>
             
-            
             <form class="form" action="" method="POST">
               {% csrf_token %}
-              {% for field in form %}
+
+              <div class="form__group">
+                <label for="placeName">שם מלא:</label>
+                {{form.name}}
+              </div>
+  
+              <div class="form__group">
+                <label for="placeAddress">כינוי באתר:</label>
+                {{form.username}}
+              </div>
+  
+              <div class="form__group">
+                <label for="placePhoneNumber">כתובת מייל:</label>
+                {{form.email}}
+              </div>
+  
+              <div class="form__group">
+                <label for="placeEmail">סיסמה:<br> (הסיסמה לא יכולה להיות זהה לשדות אישים אחרים, חייבת להכיל לפחות 8 תווים, הסיסמה לא יכולה להכיל רק מספרים)</label>
+                {{form.password1}}
+              </div>
+  
+              <div class="form__group">
+                <label for="placeDescription">אימות סיסמה:</label>
+                {{form.password2}}
+              </div>
+
+              <!-- {% for field in form %}
               <div class="form__group form__group">
-                <label for="room_name">{{field.label}}</label> <!--לפצל לחלקים גדולים בשביל עברית-->
+                <label for="room_name">{{field.label}}</label>
                 {{field}}
               </div>
-            {% endfor %}
+            {% endfor %} -->
 
               <button class="btn btn--main" type="submit">
                 <svg
