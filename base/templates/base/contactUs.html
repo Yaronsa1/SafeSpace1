@@ -1,0 +1,28 @@
+{% extends 'mainPage.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="layout__box">
+      <div class="layout__boxHeader">
+        <div class="layout__boxTitle">
+            <h3>צור קשר:</h3>
+        </div>
+      </div>
+      <div class="layout__body">
+        <h2 class="auth__tagline">נתקלתם בבעיה בזמן השימוש באתר?<br>נשמח לשמוע מכם</h2>
+        <hr><br>
+        <h2>מייל לפניות:</h2>
+        <h2>DogmaMail@email.com</h2>
+        <br>
+        <h2>או בטלפון:</h2>
+        <h2>08-0000000</h2>
+        <br>
+        <hr><br>
+        <div class="form__action">
+            <a class="btn btn--main" href="{% url 'homePage' %}">חזור/י למסך הבית</a>
+          </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}
