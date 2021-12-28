@@ -170,6 +170,9 @@ def updateUser(request):
             return redirect('userProfile', primaryKey=user.id)
     return render(request,'base/updateUser.html',{'form':form})
 
+def contactUs(request):
+    return render(request, 'base/contactUs.html')
+
 #mobile
 def restrictionsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
