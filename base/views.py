@@ -14,7 +14,7 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect('homePage')
     if request.method == 'POST':
-        userName = request.POST.get('username') #####
+        userName = request.POST.get('username') 
         password = request.POST.get('password')
         try:
             user = User.objects.get(username = userName) 
@@ -76,7 +76,6 @@ def homePage(request):
         Q(placePhoneNumber__icontains = q)).distinct()
     placesComments = Comment.objects.filter(Q(place__restrictions__name__icontains = q)).distinct()
     restrictions = Restrictions.objects.all()
-
     context = {'places':places,'restrictions':restrictions,'placesComments':placesComments}
     return render(request, 'base/homePage.html',context)
 
@@ -140,7 +139,7 @@ def updatePlace(request,primaryKey):
 @login_required (login_url= 'loginPage')
 def deletePlace(request,primaryKey):
     place = Place.objects.get(id = primaryKey)
-    if request.user != place.owner:
+    if request.user != place.owner and request.user.permission != 2:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         place.delete()
@@ -152,7 +151,7 @@ def deletePlace(request,primaryKey):
 @login_required (login_url= 'loginPage')
 def commentDelete(request,primaryKey):
     currentComment = Comment.objects.get(id = primaryKey)
-    if request.user != currentComment.owner:
+    if request.user != currentComment.owner and  request.user != currentComment.place.owner and request.user.permission != 2:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         currentComment.delete()
