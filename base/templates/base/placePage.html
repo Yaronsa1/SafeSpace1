@@ -19,7 +19,7 @@
               <h3>דף עסק</h3>
             </div>
 
-            {% if place.owner == request.user %}
+            {% if place.owner == request.user or request.user.permission == 2 %}
             <div class="room__topRight">
               <a href="{% url 'updatePlace' place.id %}">
                 <svg
