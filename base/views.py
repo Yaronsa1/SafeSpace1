@@ -79,7 +79,7 @@ def homePage(request):
     context = {'places':places,'restrictions':restrictions,'placesComments':placesComments}
     return render(request, 'base/homePage.html',context)
 
-
+@login_required (login_url= 'loginPage')
 def placePage(request,primaryKey):
     currentPlace = Place.objects.get(id = primaryKey)
     comments = currentPlace.comment_set.all()
