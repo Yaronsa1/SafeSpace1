@@ -1,0 +1,19 @@
+<div class="topics">
+    <div class="topics__header">
+      <h5>סינון לפי הגבלות</h5>
+      <hr>
+    </div>
+    <ul class="topics__list">
+      <li>
+        <a href="{% url 'homePage' %}" class="active">הצג את כל המקומות באתר</a>
+      </li>
+      {%for restriction in restrictions %}
+      <li>
+        <a href="{% url 'homePage' %}?q={{restriction.name}}">{{restriction.name}}</a>
+      </li>
+      {% endfor %}
+
+    </ul>
+  </div>
+
+

@@ -1,0 +1,35 @@
+{#{% load static %}#}
+{% for place in places %}
+<div class="roomListRoom">
+    <div class="roomListRoom__header">
+      <a href="{% url 'userProfile' place.owner.id %}" class="roomListRoom__author">
+        <div class="avatar avatar--small">
+          <img src="{{place.owner.avatar.url}}" />
+        </div>
+        <span>נוסף לאתר על ידי: {{place.owner.username}}@ </span>
+      </a>
+      <div class="roomListRoom__actions">
+        <span>נוסף לאתר בתאריך: {{place.addedOn}}<br>עודכן לאחרונה בתאריך: {{place.lastUpdated}}</span>
+      </div>
+    </div>
+
+     {% if place.picture %}
+       <img height="350" src="{{ place.picture.url }}">
+     {% endif %}
+
+    <div class="roomListRoom__content">
+      <a href="{% url 'placePage' place.id %}">{{place.name}}</a>
+      <p>תיאור:</p>
+      <p>{{place.description}}</p>
+      
+    </div>
+    <div>
+        <p>הגבלות החלות במקום:</p>
+    </div>
+    <div class="roomListRoom__topic">
+      {% for restriction in place.restrictions.all %}
+      <p class="roomListRoom__topic">{{restriction}}</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endfor %}
