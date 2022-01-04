@@ -6,15 +6,54 @@ from .models import Comment, Place, Restrictions, User
 from base.forms import PlaceForm, UserForm, MyUserCreationForm
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.forms import PasswordResetForm
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, BadHeaderError
+from django.utils.encoding import force_bytes
+from django.contrib import messages
 
 # Create your views here.
+
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'admin@example.com', [user.email], fail_silently=True)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
+                    return redirect('/password_reset/done')
+            messages.error(request, 'An invalid email has been entered.')
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="password_reset.html",
+                  context={"password_reset_form": password_reset_form})
 
 def loginPage(request):
     page ='loginPage'
     if request.user.is_authenticated:
         return redirect('homePage')
     if request.method == 'POST':
-        userName = request.POST.get('username') 
+        userName = request.POST.get('username') #####
         password = request.POST.get('password')
         try:
             user = User.objects.get(username = userName) 
@@ -28,6 +67,8 @@ def loginPage(request):
             messages.error(request, 'שם המשתמש או סיסמה אינם נכונים') 
     context = {'page':page}
     return render(request, 'base/loginRegister.html',context)
+
+
 
 def logoutPage(request):
     logout(request)
@@ -79,7 +120,7 @@ def homePage(request):
     context = {'places':places,'restrictions':restrictions,'placesComments':placesComments}
     return render(request, 'base/homePage.html',context)
 
-@login_required (login_url= 'loginPage')
+
 def placePage(request,primaryKey):
     currentPlace = Place.objects.get(id = primaryKey)
     comments = currentPlace.comment_set.all()
@@ -117,7 +158,6 @@ def createPlace(request):
             place.save()
             return redirect('homePage')
             #return redirect(request, place.id)
-        
     context = {'form':form,'restrictions':restrictions}
     return render(request, 'base/placeForm.html', context)
 
@@ -139,7 +179,7 @@ def updatePlace(request,primaryKey):
 @login_required (login_url= 'loginPage')
 def deletePlace(request,primaryKey):
     place = Place.objects.get(id = primaryKey)
-    if request.user != place.owner and request.user.permission != 2:
+    if request.user != place.owner:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         place.delete()
@@ -151,7 +191,7 @@ def deletePlace(request,primaryKey):
 @login_required (login_url= 'loginPage')
 def commentDelete(request,primaryKey):
     currentComment = Comment.objects.get(id = primaryKey)
-    if request.user != currentComment.owner and  request.user != currentComment.place.owner and request.user.permission != 2:
+    if request.user != currentComment.owner:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         currentComment.delete()

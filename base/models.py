@@ -8,10 +8,9 @@ class User(AbstractUser):
     permission = models.IntegerField(default=0) #0 = visitor ; 1 = business owner ; 2 = Staff#
     haveBusiness = models.BooleanField(default=False) #False have not ; True have#
     avatar = models.ImageField(null=True, default="avatar.svg")
-
+    greenpass = models.ImageField(null=True, default="green_pass.jpg")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
 
 
 class Restrictions(models.Model):
@@ -29,6 +28,7 @@ class Place(models.Model):
     restrictions = models.ManyToManyField(Restrictions, related_name="placeRestrictions",blank=False)
     addedOn = models.DateTimeField(auto_now_add=True)
     lastUpdated = models.DateTimeField(auto_now=True)
+    picture = models.ImageField(null=True, default="noimage.png")
 
     class Meta:
         ordering = ['-addedOn', '-lastUpdated']

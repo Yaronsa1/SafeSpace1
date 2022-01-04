@@ -1,3 +1,4 @@
+{#{% load static %}#}
 {% for place in places %}
 <div class="roomListRoom">
     <div class="roomListRoom__header">
@@ -11,6 +12,11 @@
         <span>נוסף לאתר בתאריך: {{place.addedOn}}<br>עודכן לאחרונה בתאריך: {{place.lastUpdated}}</span>
       </div>
     </div>
+
+     {% if place.picture %}
+       <img height="350" src="{{ place.picture.url }}">
+     {% endif %}
+
     <div class="roomListRoom__content">
       <a href="{% url 'placePage' place.id %}">{{place.name}}</a>
       <p>תיאור:</p>

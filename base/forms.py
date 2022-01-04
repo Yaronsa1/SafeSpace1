@@ -17,4 +17,5 @@ class PlaceForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['name', 'username','email','avatar']
+        fields = ['name', 'username','email','avatar', 'greenpass']
+
