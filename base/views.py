@@ -149,13 +149,14 @@ def createPlace(request):
     form = PlaceForm()
     restrictions = Restrictions.objects.all()
     if request.method == 'POST':
-        form = PlaceForm(request.POST)
+        form = PlaceForm(request.POST, request.FILES)
         if form.is_valid():
             request.user.haveBusiness = True
             request.user.save()
             place = form.save(commit=False)
             place.owner = request.user
             place.save()
+
             return redirect('homePage')
             #return redirect(request, place.id)
     context = {'form':form,'restrictions':restrictions}
@@ -169,9 +170,10 @@ def updatePlace(request,primaryKey):
     if request.user != place.owner:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == 'POST':
-        form = PlaceForm(request.POST,instance = place)
+        form = PlaceForm(request.POST, request.FILES, instance=place)
         if form.is_valid():
             form.save()
+            place.save()
             return redirect('homePage')
     context = {'form':form,'restrictions':restrictions}
     return render(request, 'base/placeForm.html', context)
@@ -205,6 +207,7 @@ def updateUser(request):
     if request.method == 'POST':
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+            print(form)
             form.save()
             return redirect('userProfile', primaryKey=user.id)
     return render(request,'base/updateUser.html',{'form':form})
