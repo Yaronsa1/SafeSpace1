@@ -193,7 +193,7 @@ def deletePlace(request,primaryKey):
 @login_required (login_url= 'loginPage')
 def commentDelete(request,primaryKey):
     currentComment = Comment.objects.get(id = primaryKey)
-    if request.user != currentComment.owner:
+    if request.user != currentComment.owner or request.user == currentComment.place.owner:
         return HttpResponse('אינך ראשי/ת לבצע פעולה זו')
     if request.method == "POST":
         currentComment.delete()
